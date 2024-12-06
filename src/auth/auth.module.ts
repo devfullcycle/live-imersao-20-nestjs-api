@@ -5,9 +5,17 @@ import { PrismaService } from '../prisma/prisma.service';
 import { UserRoles } from './roles/roles';
 import * as bcrypt from 'bcrypt';
 import { JwtModule } from '@nestjs/jwt';
+import { UserModule } from '../user/public/user.module';
+import { AdminUserModule } from '../user/admin/admin-user.module';
+import { ConfigModule } from '../config';
+import { MailModule } from '../mail/mail.module';
 
 @Module({
   imports: [
+    UserModule,
+    AdminUserModule,
+    ConfigModule,
+    MailModule,
     JwtModule.register({
       global: true,
       secret: 'secret',
