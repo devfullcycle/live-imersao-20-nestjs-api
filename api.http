@@ -5,7 +5,45 @@ Content-Type: application/json
 
 {
   "email": "admin@user.com",
+  "password": "newpassword"
+}
+
+###
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+  "name": "New Customer",
+  "email": "newcustomer@user.com",
   "password": "secret"
+}
+
+###
+
+# Para que o e-mail seja enviado, é necessário rodar um servidor de e-mail local
+
+# npm install -g maildev
+# maildev
+
+# Essa função irá enviar um e-mail com um link para resetar a senha, 
+# porém devemos pegar apenas o hash desse link para simularmos uma requisição
+# por parte do front-end
+
+POST http://localhost:3000/auth/forgot-password
+Content-Type: application/json
+
+{
+  "email": "newcustomer@user.com",
+}
+
+###
+
+POST http://localhost:3000/auth/reset-password
+Content-Type: application/json
+
+{
+  "hash": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmb3Jnb3RVc2VySWQiOiJjbTQ5NHBhd3MwMDBiczl1dW9leHZhdTd3IiwiaWF0IjoxNzMzNDQ1MzY1LCJleHAiOjE3MzM0NDcxNjV9.pmSYiAw45vuOOYme_Uuyil25aUnn-LvU7OrM6ZHhF_I",
+  "password": "newpassword"
 }
 
 ###
@@ -13,9 +51,32 @@ Content-Type: application/json
 @jwt = {{ admin_jwt_login.response.body.access_token }}
 
 ###
-POST http://localhost:3000/prefixo
+
+GET http://localhost:3000/admin/users
+Authorization: Bearer {{ jwt }}
 
 ###
+
+GET http://localhost:3000/admin/users/cm4bytcvz000fvq99tmvsoo8a
+Authorization: Bearer {{ jwt }}
+
+###
+
+PATCH  http://localhost:3000/admin/users/cm4bytcvz000fvq99tmvsoo8a
+Content-Type: application/json
+Authorization: Bearer {{ jwt }}
+
+{
+  "name": "New User Name"
+}
+
+###
+
+DELETE  http://localhost:3000/admin/users/cm4bytcvz000fvq99tmvsoo8a
+Authorization: Bearer {{ jwt }}
+
+###
+
 GET http://localhost:3000/admin/products
 Authorization: Bearer {{ jwt }}
 
